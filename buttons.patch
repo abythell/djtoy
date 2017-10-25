@@ -1,0 +1,45 @@
+--- buttons.cpp.orig	2009-03-29 13:34:14.000000000 -0700
++++ buttons.cpp	2014-11-26 16:14:10.702215157 -0800
+@@ -3,11 +3,16 @@
+  *  One-shot and hold functions for buttons.
+  *  Created by Franky on 29/01/09.
+  *  Licensed under LGPL (free to modify and use as you wish)
++ *
++ *  Modified by Andrew Bythell <abythell@ieee.org> to work with
++ *  active low (vs. active high) buttons
+  */
+
++/*
++ * update to support Arduino 1.X
++ */
++#include <Arduino.h>
+
+-
+-#include "WConstants.h"
+ #include "buttons.h"
+
+
+@@ -53,15 +58,15 @@
+
+
+ byte Button::check() {
+-	if (digitalRead(pin)) {
++	if (!digitalRead(pin)) {
+ 		switch (mode) {
+ 			case OneShot:
+ 				if (previous) {
+-					return OFF;
++					return ON;
+ 				}
+ 				else {
+ 					previous = true;
+-					return ON;
++					return OFF;
+ 				}
+ 				break;
+ 			case Memory:
+@@ -153,3 +158,4 @@
+ 	return OFF;
+ }
+
++
